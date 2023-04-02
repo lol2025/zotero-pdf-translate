@@ -9,13 +9,16 @@ export const deeplpro = <TranslateTaskProcessor>async function (data) {
 };
 
 async function deepl(url: string, data: Required<TranslateTask>) {
-  const reqBody = `auth_key=${data.secret}&text=${encodeURIComponent(
+  const reqBody = `text=${encodeURIComponent(
     data.raw
   )}&source_lang=${data.langfrom
     .split("-")[0]
     .toUpperCase()}&target_lang=${data.langto.split("-")[0].toUpperCase()}`;
   const xhr = await Zotero.HTTP.request("POST", url, {
     responseType: "json",
+    headers: {
+      Authorization: `DeepL-Auth-Key ${data.secret}`,
+    },
     body: reqBody,
   });
   if (xhr?.status !== 200) {
